@@ -10,3 +10,4 @@ ncores <- read.csv('')
 
 pf <- PhyloFactor(Data,tree,MetaData,formula,choice='F',nfactors=nfactors,ncores=ncores)
   
+'yo'
