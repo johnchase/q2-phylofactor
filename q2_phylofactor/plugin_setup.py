@@ -1,13 +1,20 @@
+import q2_phylofactor
+import qiime2
+
 from qiime2.plugin import (
     Plugin,
     Str,
     Numeric,
-)
+    Int,
+    Metadata)
 
 from q2_types.feature_table import FeatureTable, Frequency
-
-import q2_phylofactor
 from q2_phylofactor._phylofactor import phylofactor
+from q2_types.tree import Phylogeny, Rooted
+from q2_types.feature_data import FeatureData, Taxonomy
+
+
+_CHOICE_OPT = {'F', 'var', 'none'}
 
 plugin = Plugin(
     name='phylofactor',
@@ -17,14 +24,20 @@ plugin = Plugin(
     description='Plugin defining clades associated with given metadata '
                 'category`',
     short_description='Plugin for running phylofactor',
-)
+    )
 
 plugin.methods.register_function(
     function=phylofactor,
-    inputs={'featuretable': FeatureTable[Frequency]
-    },
+    inputs={'table': FeatureTable[Frequency],
+            'phylogeny': Phylogeny[Rooted],
+            'taxonomy': FeatureData[Taxonomy]
+            },
     parameters={
-        'text': Str,
+        'metadata': Metadata,
+        'formula': Str,
+        'choice': Str % qiime2.plugin.Choices(_CHOICE_OPT),
+        'nfactors': Int,
+        'ncores': Int
     },
     outputs=[
         ('featuretable', FeatureTable[Frequency])
@@ -32,8 +45,7 @@ plugin.methods.register_function(
     input_descriptions={
         },
     parameter_descriptions={
-        'text': 'Number of CPU cores to use.',
-    },
+        },
     output_descriptions={
         },
     name='Run Phylofactor',
