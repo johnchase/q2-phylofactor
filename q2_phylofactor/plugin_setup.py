@@ -21,7 +21,7 @@ plugin = Plugin(
 
 plugin.methods.register_function(
     function=phylofactor,
-    inputs={
+    inputs={'featuretable': FeatureTable[Frequency]
     },
     parameters={
         'text': Str,
