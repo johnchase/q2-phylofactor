@@ -9,7 +9,7 @@ setup(
     author='John Chase',
     author_email='chasejohnh@gmail.com',
     url='https://github.com/johnchase/q2-phylofactor',
-    scripts=['q2_phylofactor/assets/_phylofactor.R'],
+    scripts=['q2_phylofactor/assets/run_phylofactor.R'],
     entry_points={
         'qiime2.plugins':
         ['q2-phylofactor=q2_phylofactor.plugin_setup:plugin']
