@@ -36,7 +36,7 @@ def _phylofactor(table,
                  ncores):
     with tempfile.TemporaryDirectory() as temp_dir_name:
         biom_fp = os.path.join(temp_dir_name, 'output.tsv.biom')
-        cmd = '_phylofactor.R',
+        cmd = 'run_phylofactor.R',
                # str(table),
                # biom_fp,
                # str(phylogeny),
