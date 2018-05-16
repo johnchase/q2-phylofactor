@@ -21,6 +21,9 @@ def run_commands(cmds, verbose=True):
         if verbose:
             print("\nCommand:", end=' ')
             print(" ".join(cmd), end='\n\n')
+        print('*************************start*******************')
+        print(cmd)
+        print('*************************end*******************')
         subprocess.run(cmd, check=True)
 
 def _phylofactor(table,
@@ -33,16 +36,16 @@ def _phylofactor(table,
                  ncores):
     with tempfile.TemporaryDirectory() as temp_dir_name:
         biom_fp = os.path.join(temp_dir_name, 'output.tsv.biom')
-        cmd = ['_phylofactor.R',
-               str(table),
-               biom_fp,
-               str(phylogeny),
-               str(taxonomy),
-               str(metadata),
-               str(formula),
-               str(choice),
-               str(nfactors),
-               str(ncores)]
+        cmd = '_phylofactor.R',
+               # str(table),
+               # biom_fp,
+               # str(phylogeny),
+               # str(taxonomy),
+               # str(metadata),
+               # str(formula),
+               # str(choice),
+               # str(nfactors),
+               # str(ncores)
         try:
             run_commands([cmd])
         except subprocess.CalledProcessError as e:
@@ -50,15 +53,15 @@ def _phylofactor(table,
                             " in R (return code %d), please inspect stdout"
                             " and stderr to learn more." % e.returncode)
     with open(biom_fp) as fh:
-        table = biom.Table.from_tsv(fh)
-    return table
+        biom_table = biom.Table.from_tsv(fh)
+    return biom_table
 
 
 def phylofactor(table: BIOMV210Format,
                 phylogeny: NewickFormat,
                 taxonomy: TSVTaxonomyFormat,
                 metadata: Metadata,
-                formula: str,
+                formula: str='Data ~ X',
                 choice: str='F',
                 nfactors: int=10,
                 ncores: int=1

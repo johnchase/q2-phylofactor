@@ -10,7 +10,7 @@ from qiime2.plugin import (
 
 from q2_types.feature_table import FeatureTable, Frequency
 from q2_phylofactor._phylofactor import phylofactor
-from q2_types.tree import Phylogeny, Rooted
+from q2_types.tree import Phylogeny, Unrooted
 from q2_types.feature_data import FeatureData, Taxonomy
 
 
@@ -29,7 +29,7 @@ plugin = Plugin(
 plugin.methods.register_function(
     function=phylofactor,
     inputs={'table': FeatureTable[Frequency],
-            'phylogeny': Phylogeny[Rooted],
+            'phylogeny': Phylogeny[Unrooted],
             'taxonomy': FeatureData[Taxonomy]
             },
     parameters={
