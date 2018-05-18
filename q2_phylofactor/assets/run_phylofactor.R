@@ -1,46 +1,41 @@
 #!/usr/bin/env Rscript
 
-# cat(R.version$version.string, "\n")
-R.version
+library(phylofactor)
+
+# The following line ensures that distuils does not try to compile this as
+# python. It can likly be removed once script is completed
+.this <- "this"
+
 args <- commandArgs(TRUE)
-# # print(args)
-# table.path <- args[[1]]
-# # library(MASS)
-# # write.table(motors, file=table.path, sep='\t', row.names=TRUE, col.names=TRUE)
-#
-#
-# # tree.path <- args[[2]]
-# # out.path <- args[[3]]
-# # metadata.path <- args[[4]]
-# # taxonomy.path <- args[[5]]
-# # formula <- as.formula(args[[6]])
-# # choice <- args[[7]]
-# # nfactors <- as.integer(args[[8]])
-# # ncores <- as.integer(args[[9]])
-# print('***********************ARE we getting here!!!!!!!*******')
-# print(table.path)
-# # Data <- read.csv(table.path)
-# # write.csv(pf$factors, file = out.path, sep = '\t', row.names = TRUE, col.names = TRUE)
-# tree <- read.tree('')
-# MetaData <- read.csv('')
-# taxonomy <- read.csv('')
-#
-# formula <- as.formula(formula)
-#
-# # LHS <- as.character(formula[[2]]) ## will need to check LHS and family.
-#
-# pf <- PhyloFactor(
-#   Data,
-#   tree,
-#   MetaData,
-#   formula,
-#   choice,
-#   nfactors,
-#   ncores)
-#
+table.path <- args[[1]]
+out.path <- args[[2]]
+tree.path <- args[[3]]
+taxonomy.path <- args[[4]]
+metadata.path <- args[[5]]
+formula <- as.formula(args[[6]])
+choice <- args[[7]]
+nfactors <- as.integer(args[[8]])
+ncores <- as.integer(args[[9]])
+
+table <- read.table(file = table.path)
+tree <- read.tree(tree.path)
+# taxonomy <- read.csv(taxonomy.path, row.names = 1)
+metadata <- read.csv(metadata.path, row.names = 1)
+
+pf <- PhyloFactor(
+  table,
+  tree,
+  metadata,
+  formula,
+  choice,
+  nfactors,
+  ncores)
+
+print(pf$factors)
 # ## semantic type 1 - artifact (table)
 # write.csv(pf$factors, sep='\t', row.names=TRUE, col.names=TRUE)
-#
+# write.table(otu_table, out.path, sep = '\t')
+
 #
 # tr <- pf.tree(pf,factors=factors)
 # ##semantic type 2 - visualization
