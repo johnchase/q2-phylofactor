@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-
+#Somewhere I need to add phylofactor as a dependency
 setup(
     name='q2-phylofactor',
     version='0.0.0',
