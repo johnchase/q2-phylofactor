@@ -10,6 +10,7 @@ from q2_types.feature_data import TSVTaxonomyFormat
 
 from qiime2 import Metadata
 
+
 def run_commands(cmds, verbose=True):
     if verbose:
         print("Running external command line application(s). This may print "
@@ -21,10 +22,8 @@ def run_commands(cmds, verbose=True):
         if verbose:
             print("\nCommand:", end=' ')
             print(" ".join(cmd), end='\n\n')
-        print('*************************start*******************')
-        print(cmd)
-        print('*************************end*******************')
         subprocess.run(cmd, check=True)
+
 
 def _phylofactor(table,
                  phylogeny,
@@ -35,29 +34,35 @@ def _phylofactor(table,
                  nfactors,
                  ncores):
     with tempfile.TemporaryDirectory() as temp_dir_name:
-        biom_fp = os.path.join(temp_dir_name, 'output.tsv.biom')
-        cmd = 'run_phylofactor.R',
-               # str(table),
-               # biom_fp,
-               # str(phylogeny),
-               # str(taxonomy),
-               # str(metadata),
-               # str(formula),
-               # str(choice),
-               # str(nfactors),
-               # str(ncores)
+        input_name = os.path.join('/Users/jc33/dev/q2-phylofactor/tiny-test', 'table.tsv')
+        with open(input_name, 'w') as fh:
+            fh.write(table.to_tsv())
+        # biom_output = BIOMV210Format()
+        biom_output = os.path.join(temp_dir_name, 'out_table.tsv')
+        cmd = ['run_phylofactor.R',
+               input_name,
+               str(biom_output),
+               str(phylogeny),
+               str(taxonomy),
+               str(metadata),
+               str(formula),
+               str(choice),
+               str(nfactors),
+               str(ncores)]
         try:
+            print('Running Commands')
             run_commands([cmd])
         except subprocess.CalledProcessError as e:
             raise Exception("An error was encountered with PhyloFactor"
                             " in R (return code %d), please inspect stdout"
                             " and stderr to learn more." % e.returncode)
-    with open(biom_fp) as fh:
-        biom_table = biom.Table.from_tsv(fh)
-    return biom_table
+# I think I may be able to skip this step by writing directly to a format
+# but I'm not excactly sure yet
+        with open(biom_output) as fh:
+            biom_table = biom.Table.from_tsv(fh, None, None, None)
+    return biom_output
 
-
-def phylofactor(table: BIOMV210Format,
+def phylofactor(table: biom.Table,
                 phylogeny: NewickFormat,
                 taxonomy: TSVTaxonomyFormat,
                 metadata: Metadata,
@@ -65,7 +70,7 @@ def phylofactor(table: BIOMV210Format,
                 choice: str='F',
                 nfactors: int=10,
                 ncores: int=1
-                 ) -> (biom.Table):
+                ) -> (biom.Table):
     return _phylofactor(table,
                         phylogeny,
                         taxonomy,
