@@ -34,7 +34,7 @@ def _phylofactor(table,
                  nfactors,
                  ncores):
     with tempfile.TemporaryDirectory() as temp_dir_name:
-        input_name = os.path.join('/Users/jc33/dev/q2-phylofactor/tiny-test', 'table.tsv')
+        input_name = os.path.join(temp_dir_name, 'table.tsv')
         with open(input_name, 'w') as fh:
             fh.write(table.to_tsv())
         # biom_output = BIOMV210Format()
