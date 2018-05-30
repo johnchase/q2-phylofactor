@@ -19,7 +19,12 @@ ncores <- as.integer(args[[9]])
 
 table <- read.table(
     file = table.path,
-    check.names = FALSE)
+    check.names = FALSE,
+    header = TRUE,
+    comment.char = "",
+    sep="\t",
+    skip=1
+    )
 
 metadata <- read.table(
     metadata.path,
@@ -38,7 +43,6 @@ if (startsWith(metadata[1, 1], '#')) {
 
 tree <- read.tree(tree.path)
 
-table
 pf <- PhyloFactor(
   table,
   tree,
