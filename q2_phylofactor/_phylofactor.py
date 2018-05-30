@@ -33,6 +33,7 @@ def _phylofactor(table,
                  choice,
                  nfactors,
                  ncores):
+
     with tempfile.TemporaryDirectory() as temp_dir_name:
         input_table = os.path.join(temp_dir_name, 'table.tsv')
         input_metadata = os.path.join(temp_dir_name, 'metadata.tsv')
