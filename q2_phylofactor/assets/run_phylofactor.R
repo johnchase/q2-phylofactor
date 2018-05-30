@@ -82,7 +82,6 @@ pf <- PhyloFactor(
 #          row.names = TRUE,
 #          col.names = TRUE)
 
-print('is this printing*************************************************************')
 write.csv(pf$factors, 
           file = '/home/john/dev/q2-phylofactor/phylo_result.tsv',
           sep = '\t',
