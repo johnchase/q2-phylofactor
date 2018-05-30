@@ -34,17 +34,21 @@ def _phylofactor(table,
                  nfactors,
                  ncores):
     with tempfile.TemporaryDirectory() as temp_dir_name:
-        input_name = os.path.join(temp_dir_name, 'table.tsv')
-        with open(input_name, 'w') as fh:
+        input_table = os.path.join(temp_dir_name, 'table.tsv')
+        input_metadata = os.path.join(temp_dir_name, 'metadata.tsv')
+        with open(input_table, 'w') as fh:
             fh.write(table.to_tsv())
-        # biom_output = BIOMV210Format()
+        foo = '/home/john/dev/q2-phylofactor/test_table_qiime.tsv'
+        with open(foo, 'w') as fh:
+            fh.write(table.to_tsv())
+        metadata.save(input_metadata)
         biom_output = os.path.join(temp_dir_name, 'out_table.tsv')
         cmd = ['run_phylofactor.R',
-               input_name,
+               input_table,
                str(biom_output),
                str(phylogeny),
                str(taxonomy),
-               str(metadata),
+               input_metadata,
                str(formula),
                str(choice),
                str(nfactors),
