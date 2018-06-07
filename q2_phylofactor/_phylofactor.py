@@ -3,8 +3,6 @@ import subprocess
 import tempfile
 import biom
 
-
-from q2_types.feature_table import FeatureTable, Frequency, BIOMV210Format
 from q2_types.tree import NewickFormat
 from q2_types.feature_data import TSVTaxonomyFormat
 
@@ -29,6 +27,7 @@ def _phylofactor(table,
                  phylogeny,
                  taxonomy,
                  metadata,
+                 family,
                  formula,
                  choice,
                  nfactors,
@@ -39,9 +38,6 @@ def _phylofactor(table,
         input_metadata = os.path.join(temp_dir_name, 'metadata.tsv')
         with open(input_table, 'w') as fh:
             fh.write(table.to_tsv())
-        foo = '/home/john/dev/q2-phylofactor/test_table_qiime.tsv'
-        with open(foo, 'w') as fh:
-            fh.write(table.to_tsv())
         metadata.save(input_metadata)
         biom_output = os.path.join(temp_dir_name, 'out_table.tsv')
         cmd = ['run_phylofactor.R',
@@ -50,6 +46,7 @@ def _phylofactor(table,
                str(phylogeny),
                str(taxonomy),
                input_metadata,
+               str(family),
                str(formula),
                str(choice),
                str(nfactors),
@@ -65,12 +62,14 @@ def _phylofactor(table,
 # but I'm not excactly sure yet
         with open(biom_output) as fh:
             biom_table = biom.Table.from_tsv(fh, None, None, None)
-    return biom_output
+    return biom_table
+
 
 def phylofactor(table: biom.Table,
                 phylogeny: NewickFormat,
                 taxonomy: TSVTaxonomyFormat,
                 metadata: Metadata,
+                family: str,
                 formula: str='Data ~ X',
                 choice: str='F',
                 nfactors: int=10,
@@ -80,6 +79,7 @@ def phylofactor(table: biom.Table,
                         phylogeny,
                         taxonomy,
                         metadata,
+                        family,
                         formula,
                         choice,
                         nfactors,

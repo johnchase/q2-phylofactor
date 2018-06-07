@@ -12,11 +12,11 @@ out.path <- args[[2]]
 tree.path <- args[[3]]
 taxonomy.path <- args[[4]]
 metadata.path <- args[[5]]
-formula <- as.formula(args[[6]])
-choice <- args[[7]]
-nfactors <- as.integer(args[[8]])
-ncores <- as.integer(args[[9]])
-
+family <- get(args[[6]])
+formula <- as.formula(args[[7]])
+choice <- args[[8]]
+nfactors <- as.integer(args[[9]])
+ncores <- as.integer(args[[10]])
 
 table <- read.csv(
     file = table.path,
@@ -42,53 +42,36 @@ if (startsWith(metadata[1, 1], '#')) {
     metadata <- metadata[-c(1), ]
  }
 
-taxonomy <- read.csv(
-    file = taxonomy.path,
-    check.names = FALSE,
-    header = TRUE,
-    comment.char = "",
-    sep="\t",
-    )
-taxonomy <- taxonomy[, c('Feature ID', 'Taxon')]
-
 
 rownames(table) <- table$'#OTU ID'
-table$'#OTU ID' <- NULL
-table = data.matrix(table)
-table = table[, metadata$'#SampleID']
 
-# TODO: This is a placeholder for testing only
-colnames(table) = metadata$BodySite
+table$'#OTU ID' <- NULL
+table <- data.matrix(table)
+table <- table[, unlist(metadata[1], use.names=FALSE)]
+table <- table[tree$tip.label,]
+rownames(metadata) = unlist(metadata[1], use.names=FALSE)
+metadata$Subject <- factor(metadata$Subject)
 
 pf <- PhyloFactor(
-    table, 
-    tree,
-    metadata$BodySite,
-    nfactors = 3)
+  Data = table,
+  tree = tree,
+  X = metadata,
+  family = family,
+  frmla = Subjecte~Data,
+  choice = choice,
+  nfactors = nfactors,
+  ncores = ncores)
 
-#pf <- PhyloFactor(
-#  table,
-#  tree,
-#  metadata,
-#  BodySite~Data,
-#  choice,
-#  nfactors,
-#  ncores)
+Y <- t(pf.train$basis) %*% log(pf.train$Data) %>% t
+Y <- as.data.frame(Y)
+names(Y) <- sapply(1:10,FUN=function(x) paste('Factor_',x,sep=''))
 
- ## semantic type 1 - artifact (table)
-#write.csv(pf$factors, 
-#          file = out.path,
-#          sep = '\t',
-#          row.names = TRUE,
-#          col.names = TRUE)
-
-write.csv(pf$factors, 
-          file = '/home/john/dev/q2-phylofactor/phylo_result.tsv',
+write.table(Y,
+          file = 'phylofactors.tsv',
           sep = '\t',
           row.names = TRUE,
-          col.names = TRUE
-          )
-## write.table(otu_table, out.path, sep = '\t')
+          col.names = TRUE)
+
 #
 ##
 ## tr <- pf.tree(pf,factors=factors)

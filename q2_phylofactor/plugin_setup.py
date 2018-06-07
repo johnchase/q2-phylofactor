@@ -4,7 +4,6 @@ import qiime2
 from qiime2.plugin import (
     Plugin,
     Str,
-    Numeric,
     Int,
     Metadata)
 
@@ -35,6 +34,7 @@ plugin.methods.register_function(
     parameters={
         'metadata': Metadata,
         'formula': Str,
+        'family': Str,
         'choice': Str % qiime2.plugin.Choices(_CHOICE_OPT),
         'nfactors': Int,
         'ncores': Int
