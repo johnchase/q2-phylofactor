@@ -23,57 +23,49 @@ table <- read.csv(
     check.names = FALSE,
     header = TRUE,
     comment.char = "",
-    sep="\t",
-    skip=1,
+    sep = "\t",
+    skip = 1,
     )
 
 tree <- read.tree(tree.path)
 
 metadata <- read.csv(
     file = metadata.path,
-    sep = '\t',
+    sep = "\t",
     comment.char = "",
     header = TRUE,
     check.names = FALSE,
     stringsAsFactors = FALSE
    )
 
-if (startsWith(metadata[1, 1], '#')) {
-    metadata <- metadata[-c(1), ]
- }
+#Convert the data to types that R can understand
+metadata.types <- metadata[1, ]
+metadata <- metadata[-c(1), ]
 
-
-rownames(table) <- table$'#OTU ID'
-
-table$'#OTU ID' <- NULL
+rownames(table) <- table$"#OTU ID"
+table$"#OTU ID" <- NULL
 table <- data.matrix(table)
-table <- table[, unlist(metadata[1], use.names=FALSE)]
-table <- table[tree$tip.label,]
-rownames(metadata) = unlist(metadata[1], use.names=FALSE)
-metadata$Subject <- factor(metadata$Subject)
+table <- table[, unlist(metadata[1], use.names = FALSE)]
+rownames(metadata) <- unlist(metadata[1], use.names = FALSE)
+
+metadata <- lapply(metadata, factor)
 
 pf <- PhyloFactor(
   Data = table,
   tree = tree,
   X = metadata,
   family = family,
-  frmla = Subjecte~Data,
+  frmla = formula,
   choice = choice,
   nfactors = nfactors,
   ncores = ncores)
 
 Y <- t(pf$basis) %*% log(pf$Data) %>% t
 Y <- as.data.frame(Y)
-names(Y) <- sapply(1:10,FUN=function(x) paste('Factor_',x,sep=''))
+names(Y) <- sapply(1:10, FUN = function(x) paste("Factor_", x, sep = ""))
 
 write.table(Y,
-          file = 'phylofactors.tsv',
-          sep = '\t',
+          file = "phylofactors.tsv",
+          sep = "\t",
           row.names = TRUE,
           col.names = TRUE)
-
-#
-##
-## tr <- pf.tree(pf,factors=factors)
-# ##semantic type 2 - visualization
-# tr$ggplot
