@@ -62,7 +62,7 @@ pf <- PhyloFactor(
 
 Y <- t(pf$basis) %*% log(pf$Data) %>% t
 Y <- as.data.frame(Y)
-names(Y) <- sapply(1:10, FUN = function(x) paste("Factor_", x, sep = ""))
+names(Y) <- sapply(1:nfactors, FUN = function(x) paste("Factor_", x, sep = ""))
 
 write.table(Y,
           file = "phylofactors.tsv",
