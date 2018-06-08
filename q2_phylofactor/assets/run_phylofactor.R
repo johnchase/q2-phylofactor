@@ -60,7 +60,7 @@ pf <- PhyloFactor(
   nfactors = nfactors,
   ncores = ncores)
 
-Y <- t(pf.train$basis) %*% log(pf.train$Data) %>% t
+Y <- t(pf$basis) %*% log(pf$Data) %>% t
 Y <- as.data.frame(Y)
 names(Y) <- sapply(1:10, FUN = function(x) paste("Factor_", x, sep = ""))
 
