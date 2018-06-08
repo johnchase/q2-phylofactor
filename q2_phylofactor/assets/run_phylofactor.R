@@ -70,4 +70,5 @@ write.table(Y,
           file = out.path,
           sep = "\t",
           row.names = FALSE,
-          col.names = TRUE)
+          col.names = TRUE,
+          quote = FALSE)
