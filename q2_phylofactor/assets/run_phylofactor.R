@@ -63,9 +63,11 @@ pf <- PhyloFactor(
 Y <- t(pf$basis) %*% log(pf$Data) %>% t
 Y <- as.data.frame(Y)
 names(Y) <- sapply(1:nfactors, FUN = function(x) paste("Factor_", x, sep = ""))
+Y <- cbind("#OTU ID" = rownames(Y), Y)
+
 
 write.table(Y,
-          file = "phylofactors.tsv",
+          file = out.path,
           sep = "\t",
-          row.names = TRUE,
+          row.names = FALSE,
           col.names = TRUE)
