@@ -31,6 +31,7 @@ plugin.methods.register_function(
             'phylogeny': Phylogeny[Unrooted],
             'taxonomy': FeatureData[Taxonomy]
             },
+
     parameters={
         'metadata': Metadata,
         'formula': Str,
@@ -51,4 +52,23 @@ plugin.methods.register_function(
     name='Run Phylofactor',
     description='Phylofactor defines clades that are associated with '
                 'metadata columns of interest'
+)
+plugin.methods.register_function(
+    function=transform,
+    inputs={'table': FeatureTable[Frequency]},
+
+    parameters={
+        'pseudo_count': Int,
+    },
+    outputs=[
+        ('featuretable', FeatureTable[Frequency])
+    ],
+    input_descriptions={
+        },
+    parameter_descriptions={
+        },
+    output_descriptions={
+        },
+    name='Transform',
+    description='Transform data prior to running phylofactor'
 )

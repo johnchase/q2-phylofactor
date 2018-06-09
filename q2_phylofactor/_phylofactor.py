@@ -70,10 +70,10 @@ def phylofactor(table: biom.Table,
                 taxonomy: TSVTaxonomyFormat,
                 metadata: Metadata,
                 family: str,
-                formula: str='Data ~ X',
-                choice: str='F',
-                nfactors: int=10,
-                ncores: int=1
+                formula: str = 'Data ~ X',
+                choice: str = 'F',
+                nfactors: int = 10,
+                ncores: int = 1
                 ) -> (biom.Table):
     return _phylofactor(table,
                         phylogeny,
