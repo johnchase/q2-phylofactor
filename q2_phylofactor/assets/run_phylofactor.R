@@ -9,13 +9,15 @@ library(phylofactor)
 args <- commandArgs(TRUE)
 table.path <- args[[1]]
 out.table.path <- args[[2]]
-tree.path <- args[[3]]
-taxonomy.path <- args[[4]]
-metadata.path <- args[[5]]
-family <- get(args[[6]])
-formula <- as.formula(args[[7]])
-choice <- args[[8]]
-nfactors <- as.integer(args[[9]])
+out.tree.path <- args[[3]]
+out.group.path <- args[[4]]
+tree.path <- args[[5]]
+taxonomy.path <- args[[6]]
+metadata.path <- args[[7]]
+family <- get(args[[8]])
+formula <- as.formula(args[[9]])
+choice <- args[[10]]
+nfactors <- as.integer(args[[11]])
 ncores <- as.integer(args[[10]])
 
 table <- read.csv(
@@ -24,7 +26,7 @@ table <- read.csv(
     header = TRUE,
     comment.char = "",
     sep = "\t",
-    skip = 1,
+    skip = 1
     )
 
 tree <- read.tree(tree.path)
