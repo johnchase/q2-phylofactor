@@ -8,7 +8,7 @@ library(phylofactor)
 
 args <- commandArgs(TRUE)
 table.path <- args[[1]]
-out.path <- args[[2]]
+out.table.path <- args[[2]]
 tree.path <- args[[3]]
 taxonomy.path <- args[[4]]
 metadata.path <- args[[5]]
@@ -66,9 +66,34 @@ names(Y) <- sapply(1:nfactors, FUN = function(x) paste("Factor_", x, sep = ""))
 Y <- cbind("#OTU ID" = rownames(Y), Y)
 
 
+## write table
 write.table(Y,
-          file = out.path,
+          file = out.table.path,
           sep = "\t",
           row.names = FALSE,
           col.names = TRUE,
           quote = FALSE)
+
+
+## write groups as data frame
+groups.to.df <- function(g){
+  DF <- NULL
+  for (i in 1:length(g)){
+    DF <- rbind(DF,data.frame('factor'=rep(i,length(unlist(g[[i]]))),
+                              'group'=c(rep(1,length(g[[i]][[1]])),rep(2,length(g[[i]][[2]]))),
+                              'index'=unlist(g[[i]]),
+                              stringsAsFactors = F))
+  }
+  return(DF)
+}
+
+group.data.frame <- groups.to.df(pf.groupsTospecies(pf))
+write.table(group.data.frame,
+            file=out.group.path,
+            row.names=FALSE,
+            col.names=TRUE,
+            quote=FALSE)
+
+## write tree
+write.tree(pf$tree,
+           file = out.tree.path)
