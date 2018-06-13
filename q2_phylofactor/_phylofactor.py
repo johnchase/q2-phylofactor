@@ -25,7 +25,6 @@ def run_commands(cmds, verbose=True):
 
 def _phylofactor(table,
                  phylogeny,
-                 taxonomy,
                  metadata,
                  family,
                  formula,
@@ -39,18 +38,21 @@ def _phylofactor(table,
         with open(input_table, 'w') as fh:
             fh.write(table.to_tsv())
         metadata.save(input_metadata)
+
         biom_output = os.path.join(temp_dir_name, 'out_table.tsv')
+        tree_output = os.path.join(temp_dir_name, 'tree.nwk')
+
         cmd = ['run_phylofactor.R',
                input_table,
-               str(biom_output),
                str(phylogeny),
-               str(taxonomy),
                input_metadata,
                str(family),
                str(formula),
                str(choice),
                str(nfactors),
-               str(ncores)]
+               str(ncores),
+               str(biom_output),
+               str(tree_output)]
         try:
             print('Running Commands')
             run_commands([cmd])
@@ -67,17 +69,15 @@ def _phylofactor(table,
 
 def phylofactor(table: biom.Table,
                 phylogeny: NewickFormat,
-                taxonomy: TSVTaxonomyFormat,
                 metadata: Metadata,
                 family: str,
                 formula: str = 'Data ~ X',
                 choice: str = 'F',
                 nfactors: int = 10,
                 ncores: int = 1
-                ) -> (biom.Table):
+                ) -> (biom.Table, NewickFormat):
     return _phylofactor(table,
                         phylogeny,
-                        taxonomy,
                         metadata,
                         family,
                         formula,

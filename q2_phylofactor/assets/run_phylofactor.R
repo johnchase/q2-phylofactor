@@ -8,17 +8,16 @@ library(phylofactor)
 
 args <- commandArgs(TRUE)
 table.path <- args[[1]]
-out.table.path <- args[[2]]
-out.tree.path <- args[[3]]
-out.group.path <- args[[4]]
-tree.path <- args[[5]]
-taxonomy.path <- args[[6]]
-metadata.path <- args[[7]]
-family <- get(args[[8]])
-formula <- as.formula(args[[9]])
-choice <- args[[10]]
-nfactors <- as.integer(args[[11]])
-ncores <- as.integer(args[[10]])
+tree.path <- args[[2]]
+metadata.path <- args[[3]]
+family <- get(args[[4]])
+formula <- as.formula(args[[5]])
+choice <- args[[6]]
+nfactors <- as.integer(args[[7]])
+ncores <- as.integer(args[[8]])
+out_table.path <- args[[9]]
+out_tree.path <- args[[10]]
+# out_group.path <- args[[11]]
 
 table <- read.csv(
     file = table.path,
@@ -51,6 +50,7 @@ table <- table[, unlist(metadata[1], use.names = FALSE)]
 rownames(metadata) <- unlist(metadata[1], use.names = FALSE)
 
 metadata <- lapply(metadata, factor)
+print(typeof(metadata$Subject))
 
 pf <- PhyloFactor(
   Data = table,
@@ -70,7 +70,7 @@ Y <- cbind("#OTU ID" = rownames(Y), Y)
 
 ## write table
 write.table(Y,
-          file = out.table.path,
+          file = out_table.path,
           sep = "\t",
           row.names = FALSE,
           col.names = TRUE,
@@ -89,13 +89,14 @@ groups.to.df <- function(g){
   return(DF)
 }
 
-group.data.frame <- groups.to.df(pf.groupsTospecies(pf))
-write.table(group.data.frame,
-            file=out.group.path,
-            row.names=FALSE,
-            col.names=TRUE,
-            quote=FALSE)
+group.df <- groups.to_df(pf.groupsTospecies(pf))
+# write.table(group.df,
+#             file = out_group.path,
+#             row.names = FALSE,
+#             col.names = TRUE,
+#             quote = FALSE,
+#             sep = "\t")
 
 ## write tree
 write.tree(pf$tree,
-           file = out.tree.path)
+           file = out_tree.path)

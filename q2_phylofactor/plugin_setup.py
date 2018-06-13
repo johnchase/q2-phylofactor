@@ -7,11 +7,10 @@ from qiime2.plugin import (
     Int,
     Metadata)
 
-from q2_types.feature_table import FeatureTable, Frequency
 from q2_phylofactor._phylofactor import phylofactor
 from q2_types.tree import Phylogeny, Unrooted
 from q2_types.feature_data import FeatureData, Taxonomy
-
+from q2_types.feature_table import FeatureTable, Frequency
 
 _CHOICE_OPT = {'F', 'var', 'none'}
 
@@ -29,7 +28,6 @@ plugin.methods.register_function(
     function=phylofactor,
     inputs={'table': FeatureTable[Frequency],
             'phylogeny': Phylogeny[Unrooted],
-            'taxonomy': FeatureData[Taxonomy]
             },
 
     parameters={
@@ -41,7 +39,8 @@ plugin.methods.register_function(
         'ncores': Int
     },
     outputs=[
-        ('featuretable', FeatureTable[Frequency])
+        ('featuretable', FeatureTable[Frequency]),
+        ('tree', Phylogeny[Unrooted])
     ],
     input_descriptions={
         },
@@ -52,23 +51,4 @@ plugin.methods.register_function(
     name='Run Phylofactor',
     description='Phylofactor defines clades that are associated with '
                 'metadata columns of interest'
-)
-plugin.methods.register_function(
-    function=transform,
-    inputs={'table': FeatureTable[Frequency]},
-
-    parameters={
-        'pseudo_count': Int,
-    },
-    outputs=[
-        ('featuretable', FeatureTable[Frequency])
-    ],
-    input_descriptions={
-        },
-    parameter_descriptions={
-        },
-    output_descriptions={
-        },
-    name='Transform',
-    description='Transform data prior to running phylofactor'
 )
