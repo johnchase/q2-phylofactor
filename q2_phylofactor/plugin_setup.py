@@ -45,8 +45,11 @@ plugin.methods.register_function(
         ('tree', Phylogeny[Unrooted]),
         ('factors', FeatureData[Factors])
     ],
-    input_descriptions={
-        },
+    input_descriptions={'table': 'The sample by observation table',
+                        'phylogeny': ('The phylogenetic tree describing the '
+                                      'relationship of the observations in '
+                                      'table')
+                        },
     parameter_descriptions={
         },
     output_descriptions={

@@ -82,7 +82,7 @@ groups_to_df <- function(g){
     DF <- rbind(DF, data.frame("factor" = rep(i, length(unlist(g[[i]]))),
                               "group" = c(rep(1, length(g[[i]][[1]])),
                               rep(2, length(g[[i]][[2]]))),
-                              "index" = unlist(g[[i]]),
+                              "featureid" = unlist(g[[i]]),
                               stringsAsFactors = F))
   }
   return(DF)
