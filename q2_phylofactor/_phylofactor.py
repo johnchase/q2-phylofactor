@@ -66,7 +66,7 @@ def _phylofactor(table,
         with open(biom_output) as fh:
             biom_table = biom.Table.from_tsv(fh, None, None, None)
         tree = skbio.tree.TreeNode.read(tree_output)
-        factors = pd.read_csv(factor_output, sep='\t', index_col=0)
+        factors = pd.read_csv(factor_output, sep='\t')
     return biom_table, tree, factors
 
 
@@ -78,7 +78,7 @@ def phylofactor(table: biom.Table,
                 choice: str = 'F',
                 nfactors: int = 10,
                 ncores: int = 1
-                ) -> (biom.Table, skbio.tree.TreeNode, qiime2.Metadata):
+                ) -> (biom.Table, skbio.tree.TreeNode, pd.DataFrame):
     return _phylofactor(table,
                         phylogeny,
                         metadata,

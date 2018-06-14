@@ -1,11 +1,10 @@
-
 library(phylofactor)
 
 # The following line ensures that distuils does not try to compile this as
 # python. It can likly be removed once script is completed
 .this <- "this"
 
-### This code assumes the newData are ready to project onto 
+### This code assumes the newData are ready to project onto
 ### the contrast basis vectors (i.e. for ILR, the newData are log-relative-abundances)
 
 #### Functions we'll need #############
