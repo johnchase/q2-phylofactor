@@ -1,7 +1,6 @@
 #!/usr/bin/env Rscript
 
 library(phylofactor)
-
 # The following line ensures that distuils does not try to compile this as
 # python. It can likly be removed once script is completed
 .this <- "this"
@@ -17,7 +16,7 @@ nfactors <- as.integer(args[[7]])
 ncores <- as.integer(args[[8]])
 out_table.path <- args[[9]]
 out_tree.path <- args[[10]]
-# out_group.path <- args[[11]]
+out_group.path <- args[[11]]
 
 table <- read.csv(
     file = table.path,
@@ -50,7 +49,6 @@ table <- table[, unlist(metadata[1], use.names = FALSE)]
 rownames(metadata) <- unlist(metadata[1], use.names = FALSE)
 
 metadata <- lapply(metadata, factor)
-print(typeof(metadata$Subject))
 
 pf <- PhyloFactor(
   Data = table,
@@ -90,13 +88,14 @@ groups_to_df <- function(g){
   return(DF)
 }
 
+
 group.df <- groups_to_df(pf.groupsTospecies(pf))
-# write.table(group.df,
-#             file = out_group.path,
-#             row.names = FALSE,
-#             col.names = TRUE,
-#             quote = FALSE,
-#             sep = "\t")
+write.table(group.df,
+            file = out_group.path,
+            row.names = FALSE,
+            col.names = TRUE,
+            quote = FALSE,
+            sep = "\t")
 
 ## write tree
 write.tree(pf$tree,
