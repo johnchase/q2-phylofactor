@@ -6,6 +6,7 @@ Factors = SemanticType('Factors', variant_of=FeatureData.field['type'])
 
 
 class FactorsFormat(model.TextFileFormat):
+    # Update with required formatting
     def validate(*args):
         pass
 
