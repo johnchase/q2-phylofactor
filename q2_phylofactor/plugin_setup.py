@@ -1,3 +1,4 @@
+import importlib
 import q2_phylofactor
 import qiime2
 
@@ -62,3 +63,4 @@ plugin.methods.register_function(
 plugin.register_formats(FactorsFormat, FactorsDirFmt)
 plugin.register_semantic_types(Factors)
 plugin.register_semantic_type_to_format(FeatureData[Factors], FactorsDirFmt)
+importlib.import_module('q2_phylofactor._transform')
