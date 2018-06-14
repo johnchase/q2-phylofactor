@@ -78,18 +78,19 @@ write.table(Y,
 
 
 ## write groups as data frame
-groups.to.df <- function(g){
+groups_to_df <- function(g){
   DF <- NULL
   for (i in 1:length(g)){
-    DF <- rbind(DF,data.frame('factor'=rep(i,length(unlist(g[[i]]))),
-                              'group'=c(rep(1,length(g[[i]][[1]])),rep(2,length(g[[i]][[2]]))),
-                              'index'=unlist(g[[i]]),
+    DF <- rbind(DF, data.frame("factor" = rep(i, length(unlist(g[[i]]))),
+                              "group" = c(rep(1, length(g[[i]][[1]])),
+                              rep(2, length(g[[i]][[2]]))),
+                              "index" = unlist(g[[i]]),
                               stringsAsFactors = F))
   }
   return(DF)
 }
 
-group.df <- groups.to_df(pf.groupsTospecies(pf))
+group.df <- groups_to_df(pf.groupsTospecies(pf))
 # write.table(group.df,
 #             file = out_group.path,
 #             row.names = FALSE,

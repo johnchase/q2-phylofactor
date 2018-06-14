@@ -39,7 +39,7 @@ plugin.methods.register_function(
         'ncores': Int
     },
     outputs=[
-        ('featuretable', FeatureTable[Frequency]),
+        ('feature_table', FeatureTable[Frequency]),
         ('tree', Phylogeny[Unrooted])
     ],
     input_descriptions={

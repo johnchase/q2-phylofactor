@@ -2,6 +2,7 @@ import os
 import subprocess
 import tempfile
 import biom
+import skbio
 
 from q2_types.tree import NewickFormat
 from q2_types.feature_data import TSVTaxonomyFormat
@@ -64,7 +65,8 @@ def _phylofactor(table,
 # but I'm not excactly sure yet
         with open(biom_output) as fh:
             biom_table = biom.Table.from_tsv(fh, None, None, None)
-    return biom_table
+        tree = skbio.tree.TreeNode.read(tree_output)
+    return biom_table, tree
 
 
 def phylofactor(table: biom.Table,
@@ -75,7 +77,7 @@ def phylofactor(table: biom.Table,
                 choice: str = 'F',
                 nfactors: int = 10,
                 ncores: int = 1
-                ) -> (biom.Table, NewickFormat):
+                ) -> (biom.Table, skbio.tree.TreeNode):
     return _phylofactor(table,
                         phylogeny,
                         metadata,
