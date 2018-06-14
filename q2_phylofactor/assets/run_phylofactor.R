@@ -1,24 +1,22 @@
 #!/usr/bin/env Rscript
 
 library(phylofactor)
-
 # The following line ensures that distuils does not try to compile this as
 # python. It can likly be removed once script is completed
 .this <- "this"
 
 args <- commandArgs(TRUE)
 table.path <- args[[1]]
-out.table.path <- args[[2]]
-out.tree.path <- args[[3]]
-out.group.path <- args[[4]]
-tree.path <- args[[5]]
-taxonomy.path <- args[[6]]
-metadata.path <- args[[7]]
-family <- get(args[[8]])
-formula <- as.formula(args[[9]])
-choice <- args[[10]]
-nfactors <- as.integer(args[[11]])
-ncores <- as.integer(args[[10]])
+tree.path <- args[[2]]
+metadata.path <- args[[3]]
+family <- get(args[[4]])
+formula <- as.formula(args[[5]])
+choice <- args[[6]]
+nfactors <- as.integer(args[[7]])
+ncores <- as.integer(args[[8]])
+out_table.path <- args[[9]]
+out_tree.path <- args[[10]]
+out_group.path <- args[[11]]
 
 table <- read.csv(
     file = table.path,
@@ -70,7 +68,7 @@ Y <- cbind("#OTU ID" = rownames(Y), Y)
 
 ## write table
 write.table(Y,
-          file = out.table.path,
+          file = out_table.path,
           sep = "\t",
           row.names = FALSE,
           col.names = TRUE,
@@ -78,24 +76,27 @@ write.table(Y,
 
 
 ## write groups as data frame
-groups.to.df <- function(g){
+groups_to_df <- function(g){
   DF <- NULL
   for (i in 1:length(g)){
-    DF <- rbind(DF,data.frame('factor'=rep(i,length(unlist(g[[i]]))),
-                              'group'=c(rep(1,length(g[[i]][[1]])),rep(2,length(g[[i]][[2]]))),
-                              'index'=unlist(g[[i]]),
+    DF <- rbind(DF, data.frame("factor" = rep(i, length(unlist(g[[i]]))),
+                              "group" = c(rep(1, length(g[[i]][[1]])),
+                              rep(2, length(g[[i]][[2]]))),
+                              "index" = unlist(g[[i]]),
                               stringsAsFactors = F))
   }
   return(DF)
 }
 
-group.data.frame <- groups.to.df(pf.groupsTospecies(pf))
-write.table(group.data.frame,
-            file=out.group.path,
-            row.names=FALSE,
-            col.names=TRUE,
-            quote=FALSE)
+
+group.df <- groups_to_df(pf.groupsTospecies(pf))
+write.table(group.df,
+            file = out_group.path,
+            row.names = FALSE,
+            col.names = TRUE,
+            quote = FALSE,
+            sep = "\t")
 
 ## write tree
 write.tree(pf$tree,
-           file = out.tree.path)
+           file = out_tree.path)

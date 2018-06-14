@@ -1,6 +1,5 @@
 from setuptools import find_packages, setup
 
-#Somewhere I need to add phylofactor as a dependency
 setup(
     name='q2-phylofactor',
     version='0.0.0',
@@ -9,7 +8,8 @@ setup(
     author='John Chase',
     author_email='chasejohnh@gmail.com',
     url='https://github.com/johnchase/q2-phylofactor',
-    scripts=['q2_phylofactor/assets/run_phylofactor.R'],
+    scripts=['q2_phylofactor/assets/run_phylofactor.R',
+             'q2_phylofactor/assets/run_crossvmap.R'],
     entry_points={
         'qiime2.plugins':
         ['q2-phylofactor=q2_phylofactor.plugin_setup:plugin']

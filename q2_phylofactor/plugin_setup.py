@@ -5,13 +5,14 @@ from qiime2.plugin import (
     Plugin,
     Str,
     Int,
-    Metadata)
+    Metadata,
+    SemanticType)
 
-from q2_types.feature_table import FeatureTable, Frequency
 from q2_phylofactor._phylofactor import phylofactor
 from q2_types.tree import Phylogeny, Unrooted
-from q2_types.feature_data import FeatureData, Taxonomy
-
+from q2_types.feature_table import FeatureTable, Frequency
+from q2_types.feature_data import FeatureData
+from q2_phylofactor import Factors, FactorsFormat, FactorsDirFmt
 
 _CHOICE_OPT = {'F', 'var', 'none'}
 
@@ -29,7 +30,6 @@ plugin.methods.register_function(
     function=phylofactor,
     inputs={'table': FeatureTable[Frequency],
             'phylogeny': Phylogeny[Unrooted],
-            'taxonomy': FeatureData[Taxonomy]
             },
 
     parameters={
@@ -41,7 +41,9 @@ plugin.methods.register_function(
         'ncores': Int
     },
     outputs=[
-        ('featuretable', FeatureTable[Frequency])
+        ('featuretable', FeatureTable[Frequency]),
+        ('tree', Phylogeny[Unrooted]),
+        ('factors', FeatureData[Factors])
     ],
     input_descriptions={
         },
@@ -53,22 +55,7 @@ plugin.methods.register_function(
     description='Phylofactor defines clades that are associated with '
                 'metadata columns of interest'
 )
-plugin.methods.register_function(
-    function=transform,
-    inputs={'table': FeatureTable[Frequency]},
 
-    parameters={
-        'pseudo_count': Int,
-    },
-    outputs=[
-        ('featuretable', FeatureTable[Frequency])
-    ],
-    input_descriptions={
-        },
-    parameter_descriptions={
-        },
-    output_descriptions={
-        },
-    name='Transform',
-    description='Transform data prior to running phylofactor'
-)
+plugin.register_formats(FactorsFormat, FactorsDirFmt)
+plugin.register_semantic_types(Factors)
+plugin.register_semantic_type_to_format(FeatureData[Factors], FactorsDirFmt)

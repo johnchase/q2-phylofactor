@@ -2,10 +2,11 @@ import os
 import subprocess
 import tempfile
 import biom
+import skbio
+import pandas as pd
+import qiime2
 
 from q2_types.tree import NewickFormat
-from q2_types.feature_data import TSVTaxonomyFormat
-
 from qiime2 import Metadata
 
 
@@ -25,7 +26,6 @@ def run_commands(cmds, verbose=True):
 
 def _phylofactor(table,
                  phylogeny,
-                 taxonomy,
                  metadata,
                  family,
                  formula,
@@ -39,18 +39,23 @@ def _phylofactor(table,
         with open(input_table, 'w') as fh:
             fh.write(table.to_tsv())
         metadata.save(input_metadata)
+
         biom_output = os.path.join(temp_dir_name, 'out_table.tsv')
+        tree_output = os.path.join(temp_dir_name, 'tree.nwk')
+        factor_output = os.path.join(temp_dir_name, 'factors.tsv')
+
         cmd = ['run_phylofactor.R',
                input_table,
-               str(biom_output),
                str(phylogeny),
-               str(taxonomy),
                input_metadata,
                str(family),
                str(formula),
                str(choice),
                str(nfactors),
-               str(ncores)]
+               str(ncores),
+               str(biom_output),
+               str(tree_output),
+               str(factor_output)]
         try:
             print('Running Commands')
             run_commands([cmd])
@@ -58,26 +63,24 @@ def _phylofactor(table,
             raise Exception("An error was encountered with PhyloFactor"
                             " in R (return code %d), please inspect stdout"
                             " and stderr to learn more." % e.returncode)
-# I think I may be able to skip this step by writing directly to a format
-# but I'm not excactly sure yet
         with open(biom_output) as fh:
             biom_table = biom.Table.from_tsv(fh, None, None, None)
-    return biom_table
+        tree = skbio.tree.TreeNode.read(tree_output)
+        factors = pd.read_csv(factor_output, sep='\t', index_col=0)
+    return biom_table, tree, factors
 
 
 def phylofactor(table: biom.Table,
                 phylogeny: NewickFormat,
-                taxonomy: TSVTaxonomyFormat,
                 metadata: Metadata,
                 family: str,
                 formula: str = 'Data ~ X',
                 choice: str = 'F',
                 nfactors: int = 10,
                 ncores: int = 1
-                ) -> (biom.Table):
+                ) -> (biom.Table, skbio.tree.TreeNode, qiime2.Metadata):
     return _phylofactor(table,
                         phylogeny,
-                        taxonomy,
                         metadata,
                         family,
                         formula,
