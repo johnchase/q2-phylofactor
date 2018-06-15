@@ -45,7 +45,7 @@ plugin.methods.register_function(
         ('featuretable', FeatureTable[Frequency]),
         ('tree', Phylogeny[Unrooted]),
         ('factors', FeatureData[Factors])
-    ],
+        ],
     input_descriptions={'table': 'The sample by observation table',
                         'phylogeny': ('The phylogenetic tree describing the '
                                       'relationship of the observations in '
