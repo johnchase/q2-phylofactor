@@ -66,10 +66,11 @@ def _phylofactor(table,
         with open(biom_output) as fh:
             biom_table = biom.Table.from_tsv(fh, None, None, None)
         tree = skbio.tree.TreeNode.read(tree_output)
+        # I think there is a way to remove the pandas call and just use Factors
         factors = pd.read_csv(factor_output, sep='\t')
     return biom_table, tree, factors
 
-
+# Does this really need to be it's own function?
 def phylofactor(table: biom.Table,
                 phylogeny: NewickFormat,
                 metadata: Metadata,
@@ -88,3 +89,23 @@ def phylofactor(table: biom.Table,
                         nfactors,
                         ncores,
                         )
+
+
+# def cross_validate_map(factor_groups: pd.DataFrame,
+#                        phylogeny: NewickFormat
+#                        ) -> (biom.Table, pd.DataFrame):
+#
+#     cmd = ['run_phylofactor.R',
+#            input_table,
+#            str(phylogeny),
+#            input_metadata,
+#            str(family),
+#            str(formula),
+#            str(choice),
+#            str(nfactors),
+#            str(ncores),
+#            str(biom_output),
+#            str(tree_output),
+#            str(factor_output)]
+#
+#     return biom_table, tree, factors

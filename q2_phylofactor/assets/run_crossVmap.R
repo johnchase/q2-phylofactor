@@ -1,3 +1,5 @@
+#!/usr/bin/env Rscript
+
 library(phylofactor)
 
 # The following line ensures that distuils does not try to compile this as
@@ -23,8 +25,8 @@ df.to.groups <- function(DF){
   L <- vector(mode='list',length=nfactors)
   names(L) <- paste('factor',1:nfactors)
   for (i in 1:nfactors){
-    L[[i]] <- list('Group1'=DF$index[DF$group==1 & DF$factor==i],
-                   'Group2'=DF$index[DF$group==2 & DF$factor==i])
+    L[[i]] <- list('Group1'=DF$featureid[DF$group==1 & DF$factor==i],
+                   'Group2'=DF$featureid[DF$group==2 & DF$factor==i])
   }
   return(L)
 }
@@ -40,7 +42,7 @@ out.group.path <- args[[6]]
 
 
 tr <- read.tree(
-  file=old.tree.path
+  file = old.tree.path
 )
 
 old.groups <- read.csv(
@@ -59,20 +61,21 @@ table <- read.csv(
   skip = 1,
 )
 
-new.community <- rownames(table)
+new.community <- as.character(table$'#OTU ID')
 
-bigtree <- read.tree(tree.path)
+bigtree <- read.tree(bigtree.path)
 
 
 ### convert data frame to groups
 Grps <- df.to.groups(old.groups)
 
 ## convert species-index groups to tree-tiplabel index groups
-Grps <- lapply(Grps,FUN=function(g,tr) lapply(g,FUN=function(g,tr) match(g,tr$tip.label),tr=tr),tr=old.tree)
+Grps <- lapply(Grps,FUN=function(g,tr) lapply(g,FUN=function(g,tr) match(g,tr$tip.label),tr=tr),tr=tr)
 
 
 obj <- NULL
-obj$tree <- old.tree
+obj$tree <- tr
+
 obj$groups <- Grps
 obj$nfactors <- length(Grps)
 
@@ -88,7 +91,8 @@ cv.grps <- lapply(cv.groups,FUN=function(g,nm) lapply(g,FUN=function(g,nm) match
 ### make ILR projections
 n=length(new.community)
 V <- t(sapply(cv.grps,ilrvec,n))
-Y <- V %*% newData
+print(V)
+Y <- as.matrix(V) %*% table
 
 ## output cross-validated groups ##
 write.table(x=cv.DF,file=out.group.path,

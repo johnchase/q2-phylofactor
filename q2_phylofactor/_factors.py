@@ -2,14 +2,14 @@ from qiime2.plugin import SemanticType, model
 from q2_types.feature_data import FeatureData
 
 
-Factors = SemanticType('Factors', variant_of=FeatureData.field['type'])
+FactorGroups = SemanticType('FactorGroups', variant_of=FeatureData.field['type'])
 
 
-class FactorsFormat(model.TextFileFormat):
+class FactorGroupsFormat(model.TextFileFormat):
     # Update with required formatting
     def validate(*args):
         pass
 
 
-FactorsDirFmt = model.SingleFileDirectoryFormat(
-    'FactorsDirFmt', 'factors.tsv', FactorsFormat)
+FactorGroupsDirFmt = model.SingleFileDirectoryFormat(
+    'FactorGroupsDirFmt', 'factor_groups.tsv', FactorGroupsFormat)

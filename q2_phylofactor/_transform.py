@@ -1,18 +1,18 @@
 import qiime2
 import pandas as pd
 
-from q2_phylofactor import FactorsFormat
+from q2_phylofactor import FactorGroupsFormat
 from q2_phylofactor.plugin_setup import plugin
 
 
 @plugin.register_transformer
-def _1(ff: FactorsFormat) -> pd.DataFrame:
+def _1(ff: FactorGroupsFormat) -> pd.DataFrame:
     return pd.read_csv((str(ff)), sep='\t', index_col=0)
 
 
 @plugin.register_transformer
-def _2(df: pd.DataFrame) -> FactorsFormat:
-    ff = FactorsFormat()
+def _2(df: pd.DataFrame) -> FactorGroupsFormat:
+    ff = FactorGroupsFormat()
     df.to_csv(str(ff), sep='\t', header=True, index=True)
     return ff
 

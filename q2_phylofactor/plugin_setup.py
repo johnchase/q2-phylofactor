@@ -13,7 +13,9 @@ from q2_phylofactor._phylofactor import phylofactor
 from q2_types.tree import Phylogeny, Unrooted
 from q2_types.feature_table import FeatureTable, Frequency
 from q2_types.feature_data import FeatureData
-from q2_phylofactor import Factors, FactorsFormat, FactorsDirFmt
+from q2_phylofactor import (FactorGroups,
+                            FactorGroupsFormat,
+                            FactorGroupsDirFmt)
 
 _CHOICE_OPT = {'F', 'var', 'none'}
 
@@ -42,9 +44,9 @@ plugin.methods.register_function(
         'ncores': Int
     },
     outputs=[
-        ('featuretable', FeatureTable[Frequency]),
+        ('factors', FeatureTable[Frequency]),
         ('tree', Phylogeny[Unrooted]),
-        ('factors', FeatureData[Factors])
+        ('groups', FeatureData[FactorGroups])
         ],
     input_descriptions={'table': 'The sample by observation table',
                         'phylogeny': ('The phylogenetic tree describing the '
@@ -60,7 +62,35 @@ plugin.methods.register_function(
                 'metadata columns of interest'
 )
 
-plugin.register_formats(FactorsFormat, FactorsDirFmt)
-plugin.register_semantic_types(Factors)
-plugin.register_semantic_type_to_format(FeatureData[Factors], FactorsDirFmt)
+
+# plugin.methods.register_function(
+#     function=cross_validate_map,
+#     inputs={'factor_groups': FeatureData[Factors],
+#             'phylogeny': Phylogeny[Unrooted],
+#             },
+#
+#     parameters={
+#     },
+#     outputs=[
+#         ('featuretable', FeatureTable[Frequency]),
+#         ('factors', FeatureData[Factors])
+#         ],
+#     input_descriptions={'table': 'The sample by observation table',
+#                         'phylogeny': ('The phylogenetic tree describing the '
+#                                       'relationship of the observations in '
+#                                       'table')
+#                         },
+#     parameter_descriptions={
+#         },
+#     output_descriptions={
+#         },
+#     name='Cross validate factor groups',
+#     description='Applies factor groupings to new data sets'
+# )
+
+
+plugin.register_formats(FactorGroupsFormat, FactorGroupsDirFmt)
+plugin.register_semantic_types(FactorGroups)
+plugin.register_semantic_type_to_format(FeatureData[FactorGroups],
+                                        FactorGroupsDirFmt)
 importlib.import_module('q2_phylofactor._transform')
