@@ -90,8 +90,8 @@ cv.grps <- lapply(cv.groups,FUN=function(g,nm) lapply(g,FUN=function(g,nm) match
 
 ### make ILR projections
 n=length(new.community)
-V <- t(sapply(cv.grps,ilrvec,n))
-Y <- as.matrix(V) %*% table
+V <- t(sapply(cv.grps, ilrvec, n))
+Y <- V %*% as.matrix(table[, names(table) != '#OTU ID'])
 
 ## output cross-validated groups ##
 write.table(x=cv.DF,file=out.group.path,
