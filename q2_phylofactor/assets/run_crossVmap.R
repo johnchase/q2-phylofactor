@@ -91,7 +91,6 @@ cv.grps <- lapply(cv.groups,FUN=function(g,nm) lapply(g,FUN=function(g,nm) match
 ### make ILR projections
 n=length(new.community)
 V <- t(sapply(cv.grps,ilrvec,n))
-print(V)
 Y <- as.matrix(V) %*% table
 
 ## output cross-validated groups ##
