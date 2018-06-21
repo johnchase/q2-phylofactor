@@ -33,9 +33,9 @@ df.to.groups <- function(DF){
 ########################################
 
 args <- commandArgs(TRUE)
-old.tree.path <- args[[1]]
+newData.path <- args[[1]]
 old.groups.path <- args[[2]]
-newData.path <- args[[3]]
+old.tree.path <- args[[3]]
 bigtree.path <- args[[4]]
 out.table.path <- args[[5]]
 out.group.path <- args[[6]]

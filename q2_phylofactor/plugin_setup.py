@@ -9,7 +9,7 @@ from qiime2.plugin import (
     Metadata,
     SemanticType)
 
-from q2_phylofactor._phylofactor import phylofactor
+from q2_phylofactor._phylofactor import phylofactor, cross_validate_map
 from q2_types.tree import Phylogeny, Unrooted
 from q2_types.feature_table import FeatureTable, Frequency
 from q2_types.feature_data import FeatureData
@@ -63,30 +63,29 @@ plugin.methods.register_function(
 )
 
 
-# plugin.methods.register_function(
-#     function=cross_validate_map,
-#     inputs={'factor_groups': FeatureData[Factors],
-#             'phylogeny': Phylogeny[Unrooted],
-#             },
-#
-#     parameters={
-#     },
-#     outputs=[
-#         ('featuretable', FeatureTable[Frequency]),
-#         ('factors', FeatureData[Factors])
-#         ],
-#     input_descriptions={'table': 'The sample by observation table',
-#                         'phylogeny': ('The phylogenetic tree describing the '
-#                                       'relationship of the observations in '
-#                                       'table')
-#                         },
-#     parameter_descriptions={
-#         },
-#     output_descriptions={
-#         },
-#     name='Cross validate factor groups',
-#     description='Applies factor groupings to new data sets'
-# )
+plugin.methods.register_function(
+    function=cross_validate_map,
+    inputs={'table': FeatureTable[Frequency],
+            'groups': FeatureData[FactorGroups],
+            'phylogeny': Phylogeny[Unrooted],
+            'full_phylogeny': Phylogeny[Unrooted],
+            },
+
+    parameters={
+    },
+    outputs=[
+        ('featuretable', FeatureTable[Frequency]),
+        ('groups', FeatureData[FactorGroups])
+        ],
+    input_descriptions={
+    },
+    parameter_descriptions={
+        },
+    output_descriptions={
+        },
+    name='Cross validate factor groups',
+    description='Applies factor groupings to new data sets'
+)
 
 
 plugin.register_formats(FactorGroupsFormat, FactorGroupsDirFmt)

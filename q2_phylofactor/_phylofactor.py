@@ -91,21 +91,41 @@ def phylofactor(table: biom.Table,
                         )
 
 
-# def cross_validate_map(factor_groups: pd.DataFrame,
-#                        phylogeny: NewickFormat
-#                        ) -> (biom.Table, pd.DataFrame):
-#
-#     cmd = ['run_phylofactor.R',
-#            input_table,
-#            str(phylogeny),
-#            input_metadata,
-#            str(family),
-#            str(formula),
-#            str(choice),
-#            str(nfactors),
-#            str(ncores),
-#            str(biom_output),
-#            str(tree_output),
-#            str(factor_output)]
-#
-#     return biom_table, tree, factors
+def cross_validate_map(table: biom.Table,
+                       groups: pd.DataFrame,
+                       phylogeny: NewickFormat,
+                       full_phylogeny: NewickFormat,
+                       ) -> (biom.Table, pd.DataFrame):
+
+    with tempfile.TemporaryDirectory() as temp_dir_name:
+        input_table = os.path.join(temp_dir_name, 'table.tsv')
+        with open(input_table, 'w') as fh:
+            fh.write(table.to_tsv())
+
+        input_groups = os.path.join(temp_dir_name, 'groups.tsv')
+        groups.to_csv(input_groups, sep='\t')
+
+        biom_output = os.path.join(temp_dir_name, 'out_table.tsv')
+        group_output = os.path.join(temp_dir_name, 'groups_out.tsv')
+
+        cmd = ['run_crossVmap.R',
+               input_table,
+               input_groups,
+               str(phylogeny),
+               str(full_phylogeny),
+               str(biom_output),
+               str(group_output)]
+
+        try:
+            print('Running Commands')
+            run_commands([cmd])
+        except subprocess.CalledProcessError as e:
+            raise Exception("An error was encountered with PhyloFactor"
+                            " in R (return code %d), please inspect stdout"
+                            " and stderr to learn more." % e.returncode)
+
+        with open(biom_output) as fh:
+            biom_table = biom.Table.from_tsv(fh, None, None, None)
+        group_output_df = pd.read_csv(group_output, sep='\t')
+
+    return biom_table, group_output_df
