@@ -92,6 +92,9 @@ cv.grps <- lapply(cv.groups,FUN=function(g,nm) lapply(g,FUN=function(g,nm) match
 n=length(new.community)
 V <- t(sapply(cv.grps, ilrvec, n))
 Y <- V %*% as.matrix(table[, names(table) != '#OTU ID'])
+nfactors <- max(old.groups$factor)
+names <- sapply(1:nfactors, FUN = function(x) paste("Factor_", x, sep = ""))
+Y <- cbind("#OTU ID" = names, Y)
 
 ## output cross-validated groups ##
 write.table(x=cv.DF,file=out.group.path,
