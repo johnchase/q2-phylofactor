@@ -42,6 +42,7 @@ def _phylofactor(table,
 
         biom_output = os.path.join(temp_dir_name, 'out_table.tsv')
         tree_output = os.path.join(temp_dir_name, 'tree.nwk')
+        factor_ratio_output = os.path.join(temp_dir_name, 'factor_ratios.tsv')
         factor_output = os.path.join(temp_dir_name, 'factors.tsv')
 
         cmd = ['run_phylofactor.R',
@@ -55,6 +56,7 @@ def _phylofactor(table,
                str(ncores),
                str(biom_output),
                str(tree_output),
+               str(factor_ratio_output),
                str(factor_output)]
         try:
             print('Running Commands')
@@ -67,8 +69,9 @@ def _phylofactor(table,
             biom_table = biom.Table.from_tsv(fh, None, None, None)
         tree = skbio.tree.TreeNode.read(tree_output)
         # I think there is a way to remove the pandas call and just use Factors
+        factor_ratios = pd.read_csv(factor_ratio_output, sep='\t')
         factors = pd.read_csv(factor_output, sep='\t')
-    return biom_table, tree, factors
+    return biom_table, tree, factor_ratios, factors
 
 # Does this really need to be it's own function?
 def phylofactor(table: biom.Table,
@@ -79,7 +82,11 @@ def phylofactor(table: biom.Table,
                 choice: str = 'F',
                 nfactors: int = 10,
                 ncores: int = 1
-                ) -> (biom.Table, skbio.tree.TreeNode, pd.DataFrame):
+                ) -> (biom.Table,
+                      skbio.tree.TreeNode,
+                      pd.DataFrame,
+                      pd.DataFrame):
+
     return _phylofactor(table,
                         phylogeny,
                         metadata,

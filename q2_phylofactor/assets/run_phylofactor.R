@@ -17,6 +17,7 @@ ncores <- as.integer(args[[8]])
 out_table.path <- args[[9]]
 out_tree.path <- args[[10]]
 out_group.path <- args[[11]]
+out_factor_groups.path <- args[[12]]
 
 table <- read.csv(
     file = table.path,
@@ -93,6 +94,13 @@ group.df <- groups_to_df(pf.groupsTospecies(pf))
 write.table(group.df,
             file = out_group.path,
             row.names = FALSE,
+            col.names = TRUE,
+            quote = FALSE,
+            sep = "\t")
+
+write.table(pf$factors,
+            file = out_factor_groups.path,
+            row.names = TRUE,
             col.names = TRUE,
             quote = FALSE,
             sep = "\t")
