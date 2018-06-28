@@ -44,9 +44,10 @@ plugin.methods.register_function(
         'ncores': Int
     },
     outputs=[
-        ('factors', FeatureTable[Frequency]),
+        ('factor_ratios', FeatureTable[Frequency]),
         ('tree', Phylogeny[Unrooted]),
-        ('groups', FeatureData[FactorGroups])
+        ('groups', FeatureData[FactorGroups]),
+        ('factors', FeatureData[FactorGroups])
         ],
     input_descriptions={'table': 'The sample by observation table',
                         'phylogeny': ('The phylogenetic tree describing the '
