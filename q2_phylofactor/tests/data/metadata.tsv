@@ -1,0 +1,20 @@
+#SampleID	BarcodeSequence	LinkerPrimerSequence	BodySite	Year	Month	Day	Subject	ReportedAntibioticUsage	DaysSinceExperimentStart	Description
+#q2:types	categorical	categorical	categorical	numeric	numeric	numeric	categorical	categorical	numeric	categorical
+L1S8	AGCTGACTAGTC	GTGCCAGCMGCCGCGGTAA	gut	2008	10	28	subject-1	Yes	0	subject-1.gut.2008-10-28
+L1S57	ACACACTATGGC	GTGCCAGCMGCCGCGGTAA	gut	2009	1	20	subject-1	No	84	subject-1.gut.2009-1-20
+L1S76	ACTACGTGTGGT	GTGCCAGCMGCCGCGGTAA	gut	2009	2	17	subject-1	No	112	subject-1.gut.2009-2-17
+L1S105	AGTGCGATGCGT	GTGCCAGCMGCCGCGGTAA	gut	2009	3	17	subject-1	No	140	subject-1.gut.2009-3-17
+L2S155	ACGATGCGACCA	GTGCCAGCMGCCGCGGTAA	left palm	2009	1	20	subject-1	No	84	subject-1.left-palm.2009-1-20
+L2S175	AGCTATCCACGA	GTGCCAGCMGCCGCGGTAA	left palm	2009	2	17	subject-1	No	112	subject-1.left-palm.2009-2-17
+L2S204	ATGCAGCTCAGT	GTGCCAGCMGCCGCGGTAA	left palm	2009	3	17	subject-1	No	140	subject-1.left-palm.2009-3-17
+L2S222	CACGTGACATGT	GTGCCAGCMGCCGCGGTAA	left palm	2009	4	14	subject-1	No	168	subject-1.left-palm.2009-4-14
+L3S242	ACAGTTGCGCGA	GTGCCAGCMGCCGCGGTAA	right palm	2008	10	28	subject-1	Yes	0	subject-1.right-palm.2008-10-28
+L3S294	CACGACAGGCTA	GTGCCAGCMGCCGCGGTAA	right palm	2009	1	20	subject-1	No	84	subject-1.right-palm.2009-1-20
+L3S313	AGTGTCACGGTG	GTGCCAGCMGCCGCGGTAA	right palm	2009	2	17	subject-1	No	112	subject-1.right-palm.2009-2-17
+L3S341	CAAGTGAGAGAG	GTGCCAGCMGCCGCGGTAA	right palm	2009	3	17	subject-1	No	140	subject-1.right-palm.2009-3-17
+L3S360	CATCGTATCAAC	GTGCCAGCMGCCGCGGTAA	right palm	2009	4	14	subject-1	No	168	subject-1.right-palm.2009-4-14
+L5S104	CAGTGTCAGGAC	GTGCCAGCMGCCGCGGTAA	tongue	2008	10	28	subject-1	Yes	0	subject-1.tongue.2008-10-28
+L5S155	ATCTTAGACTGC	GTGCCAGCMGCCGCGGTAA	tongue	2009	1	20	subject-1	No	84	subject-1.tongue.2009-1-20
+L5S174	CAGACATTGCGT	GTGCCAGCMGCCGCGGTAA	tongue	2009	2	17	subject-1	No	112	subject-1.tongue.2009-2-17
+L5S203	CGATGCACCAGA	GTGCCAGCMGCCGCGGTAA	tongue	2009	3	17	subject-1	No	140	subject-1.tongue.2009-3-17
+L5S222	CTAGAGACTCTT	GTGCCAGCMGCCGCGGTAA	tongue	2009	4	14	subject-1	No	168	subject-1.tongue.2009-4-14
