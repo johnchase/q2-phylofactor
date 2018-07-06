@@ -1,0 +1,4 @@
+Group1	Group2	F	Pr(>F)
+Factor 1	21 member Monophyletic clade	79 member Monophyletic clade	168.311866740988	0.00588892116106843
+Factor 2	3 member Monophyletic clade	76 member Paraphyletic clade	69.6262196389892	0.0140602126385362
+Factor 3	tip	20 member Paraphyletic clade	64.2371117636384	0.015212994234828

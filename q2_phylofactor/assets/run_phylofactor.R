@@ -39,17 +39,22 @@ metadata <- read.csv(
     stringsAsFactors = FALSE
    )
 
-#Convert the data to types that R can understand
-metadata.types <- metadata[1, ]
-metadata <- metadata[-c(1), ]
+metatdata.type <- function(metadata) {
+  metadata.types <- metadata[1, ]
+  metadata <- metadata[-c(1), ]
+  categorical.columns <- colnames(metadata)[metadata.types == 'categorical']
+  metadata[categorical.columns] <- lapply(metadata[categorical.columns], factor)
+  numeric.columns <- colnames(metadata)[metadata.types == 'numeric']
+  metadata[numeric.columns] <- lapply(metadata[numeric.columns], as.numeric)
+  return(metadata)
+}
+
+metadata = metatdata.type(metadata)
 
 rownames(table) <- table$"#OTU ID"
 table$"#OTU ID" <- NULL
 table <- data.matrix(table)
 table <- table[, unlist(metadata[1], use.names = FALSE)]
-rownames(metadata) <- unlist(metadata[1], use.names = FALSE)
-
-metadata <- lapply(metadata, factor)
 
 pf <- PhyloFactor(
   Data = table,

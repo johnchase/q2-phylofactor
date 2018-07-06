@@ -25,12 +25,13 @@ class TestPhylofactor(TestPluginBase):
     def test_defaults(self):
 
         exp_basis = pd.read_csv(
-            self.get_data_path('expected/basis.tsv'), sep='\t')
+            self.get_data_path('expected/categorical_basis.tsv'), sep='\t')
         exp_groups = pd.read_csv(
-            self.get_data_path('expected/groups.tsv'), sep='\t')
+            self.get_data_path('expected/categorical_groups.tsv'), sep='\t')
         exp_factors = pd.read_csv(
-            self.get_data_path('expected/factors.tsv'), sep='\t')
-        exp_tree = TreeNode.read(self.get_data_path('expected/tree.nwk'))
+            self.get_data_path('expected/categorical_factors.tsv'), sep='\t')
+        exp_tree = TreeNode.read(self
+        .get_data_path('expected/categorical_tree.nwk'))
 
         pf = phylofactor(self.table,
                          self.phylogeny,
@@ -47,8 +48,31 @@ class TestPhylofactor(TestPluginBase):
         self.assertEqual(TreeNode.compare_rfd(exp_tree, out_tree), 0)
 
 
-    # def test_defaults_poisson(self):
-    #     pass
+    def test_continous(self):
+        exp_basis = pd.read_csv(
+            self.get_data_path('expected/numeric_basis.tsv'), sep='\t')
+        exp_groups = pd.read_csv(
+            self.get_data_path('expected/numeric_groups.tsv'), sep='\t')
+        exp_factors = pd.read_csv(
+            self.get_data_path('expected/numeric_factors.tsv'), sep='\t')
+        exp_tree = (TreeNode.read(self
+        .get_data_path('expected/numeric_tree.nwk')))
+
+        pf = phylofactor(self.table,
+                         self.phylogeny,
+                         self.metadata,
+                         formula='Continuous~Data',
+                         nfactors=3,
+                         family='poisson')
+
+        basis, out_tree, groups, factors = pf
+
+        assert_frame_equal(basis, exp_basis)
+        assert_frame_equal(groups, exp_groups)
+        assert_frame_equal(factors, exp_factors)
+        self.assertEqual(TreeNode.compare_rfd(exp_tree, out_tree), 0)
+
+
     # def test_non_matching_tips(self):
     #     pass
     # def test_missing_columns(self):
