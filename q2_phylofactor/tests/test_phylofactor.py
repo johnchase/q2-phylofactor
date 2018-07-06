@@ -15,31 +15,46 @@ class TestPhylofactor(TestPluginBase):
 
     def setUp(self):
         super().setUp()
-        with open(self.get_data_path('s1_data.tsv')) as fh:
+        with open(self.get_data_path('asv_table.tsv')) as fh:
             self.table = biom.Table.from_tsv(fh, None, None, None)
-        self.phylogeny = NewickFormat(self.get_data_path('s1_tree.nwk'),
+        self.phylogeny = NewickFormat(self.get_data_path('tree.nwk'),
                                       mode='r')
         self.metadata = (qiime2.Metadata
                          .load(self.get_data_path('metadata.tsv')))
 
     def test_defaults(self):
 
-        exp_factor_groups = pd.read_csv(
-            self.get_data_path('expected/factor_groups.tsv'), sep='\t')
-        exp_tree = TreeNode.read(self.get_data_path('expected/pf_tree.nwk'))
+        exp_basis = pd.read_csv(
+            self.get_data_path('expected/basis.tsv'), sep='\t')
+        exp_groups = pd.read_csv(
+            self.get_data_path('expected/groups.tsv'), sep='\t')
+        exp_factors = pd.read_csv(
+            self.get_data_path('expected/factors.tsv'), sep='\t')
+        exp_tree = TreeNode.read(self.get_data_path('expected/tree.nwk'))
 
         pf = phylofactor(self.table,
                          self.phylogeny,
                          self.metadata,
-                         formula='BodySite~Data',
+                         formula='Categorical~Data',
                          nfactors=3,
                          family='binomial')
 
-        factors, out_tree, factor_ratios, factor_groups = pf
+        basis, out_tree, groups, factors = pf
 
-        assert_frame_equal(factor_groups, exp_factor_groups)
-        # self.assertEqual(out_tree
-        #                  .compare_tip_distances(exp_tree, 0))
+        assert_frame_equal(basis, exp_basis)
+        assert_frame_equal(groups, exp_groups)
+        assert_frame_equal(factors, exp_factors)
+        self.assertEqual(TreeNode.compare_rfd(exp_tree, out_tree), 0)
+
+
+    # def test_defaults_poisson(self):
+    #     pass
+    # def test_non_matching_tips(self):
+    #     pass
+    # def test_missing_columns(self):
+    #     pass
+    # def test_choice_var(self):
+    #     pass
 
 
 if __name__ == '__main__':

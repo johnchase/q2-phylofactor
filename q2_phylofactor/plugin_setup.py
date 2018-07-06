@@ -11,7 +11,7 @@ from qiime2.plugin import (
 
 from q2_phylofactor._phylofactor import phylofactor, cross_validate_map
 from q2_types.tree import Phylogeny, Unrooted
-from q2_types.feature_table import FeatureTable, Frequency
+from q2_types.feature_table import FeatureTable, Frequency, Composition
 from q2_types.feature_data import FeatureData
 from q2_phylofactor import (FactorGroups,
                             FactorGroupsFormat,
@@ -44,7 +44,7 @@ plugin.methods.register_function(
         'ncores': Int
     },
     outputs=[
-        ('factor_ratios', FeatureTable[Frequency]),
+        ('basis', FeatureTable[Composition]),
         ('tree', Phylogeny[Unrooted]),
         ('groups', FeatureData[FactorGroups]),
         ('factors', FeatureData[FactorGroups])

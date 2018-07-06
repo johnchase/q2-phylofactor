@@ -14,10 +14,10 @@ formula <- as.formula(args[[5]])
 choice <- args[[6]]
 nfactors <- as.integer(args[[7]])
 ncores <- as.integer(args[[8]])
-out_table.path <- args[[9]]
+basis.path <- args[[9]]
 out_tree.path <- args[[10]]
-out_group.path <- args[[11]]
-out_factor_groups.path <- args[[12]]
+group.path <- args[[11]]
+factor.path <- args[[12]]
 
 table <- read.csv(
     file = table.path,
@@ -61,19 +61,14 @@ pf <- PhyloFactor(
   nfactors = nfactors,
   ncores = ncores)
 
-Y <- t(pf$basis) %*% log(pf$Data) %>% t
-Y <- as.data.frame(Y)
-names(Y) <- sapply(1:nfactors, FUN = function(x) paste("Factor_", x, sep = ""))
-Y <- cbind("#OTU ID" = rownames(Y), Y)
-
-
-## write table
-write.table(Y,
-          file = out_table.path,
-          sep = "\t",
-          row.names = FALSE,
-          col.names = TRUE,
-          quote = FALSE)
+basis <- pf$basis
+colnames(basis) <- sapply(1:nfactors, FUN = function(x) paste("Factor_", x, sep = ""))
+write.table(basis,
+            file = basis.path,
+            sep = "\t",
+            row.names = TRUE,
+            col.names = TRUE,
+            quote = FALSE)
 
 
 ## write groups as data frame
@@ -89,17 +84,16 @@ groups_to_df <- function(g){
   return(DF)
 }
 
-
 group.df <- groups_to_df(pf.groupsTospecies(pf))
 write.table(group.df,
-            file = out_group.path,
+            file = group.path,
             row.names = FALSE,
             col.names = TRUE,
             quote = FALSE,
             sep = "\t")
 
 write.table(pf$factors,
-            file = out_factor_groups.path,
+            file = factor.path,
             row.names = TRUE,
             col.names = TRUE,
             quote = FALSE,

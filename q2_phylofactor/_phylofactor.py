@@ -40,9 +40,9 @@ def _phylofactor(table,
             fh.write(table.to_tsv())
         metadata.save(input_metadata)
 
-        biom_output = os.path.join(temp_dir_name, 'out_table.tsv')
+        basis_output = os.path.join(temp_dir_name, 'basis.tsv')
         tree_output = os.path.join(temp_dir_name, 'tree.nwk')
-        factor_ratio_output = os.path.join(temp_dir_name, 'factor_ratios.tsv')
+        group_output = os.path.join(temp_dir_name, 'group.tsv')
         factor_output = os.path.join(temp_dir_name, 'factors.tsv')
 
         cmd = ['run_phylofactor.R',
@@ -54,9 +54,9 @@ def _phylofactor(table,
                str(choice),
                str(nfactors),
                str(ncores),
-               str(biom_output),
+               str(basis_output),
                str(tree_output),
-               str(factor_ratio_output),
+               str(group_output),
                str(factor_output)]
         try:
             print('Running Commands')
@@ -65,13 +65,11 @@ def _phylofactor(table,
             raise Exception("An error was encountered with PhyloFactor"
                             " in R (return code %d), please inspect stdout"
                             " and stderr to learn more." % e.returncode)
-        with open(biom_output) as fh:
-            biom_table = biom.Table.from_tsv(fh, None, None, None)
+        basis = pd.read_csv(basis_output, sep='\t')
         tree = skbio.tree.TreeNode.read(tree_output)
-        # I think there is a way to remove the pandas call and just use Factors
-        factor_ratios = pd.read_csv(factor_ratio_output, sep='\t')
+        groups = pd.read_csv(group_output, sep='\t')
         factors = pd.read_csv(factor_output, sep='\t')
-    return biom_table, tree, factor_ratios, factors
+    return basis, tree, groups, factors
 
 # Does this really need to be it's own function?
 def phylofactor(table: biom.Table,
@@ -82,7 +80,7 @@ def phylofactor(table: biom.Table,
                 choice: str = 'F',
                 nfactors: int = 10,
                 ncores: int = 1
-                ) -> (biom.Table,
+                ) -> (pd.DataFrame,
                       skbio.tree.TreeNode,
                       pd.DataFrame,
                       pd.DataFrame):
