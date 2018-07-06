@@ -1,9 +1,6 @@
 #!/usr/bin/env Rscript
 
 library(phylofactor)
-# The following line ensures that distuils does not try to compile this as
-# python. It can likly be removed once script is completed
-.this <- "this"
 
 args <- commandArgs(TRUE)
 table.path <- args[[1]]
@@ -42,14 +39,14 @@ metadata <- read.csv(
 metatdata.type <- function(metadata) {
   metadata.types <- metadata[1, ]
   metadata <- metadata[-c(1), ]
-  categorical.columns <- colnames(metadata)[metadata.types == 'categorical']
+  categorical.columns <- colnames(metadata)[metadata.types == "categorical"]
   metadata[categorical.columns] <- lapply(metadata[categorical.columns], factor)
-  numeric.columns <- colnames(metadata)[metadata.types == 'numeric']
+  numeric.columns <- colnames(metadata)[metadata.types == "numeric"]
   metadata[numeric.columns] <- lapply(metadata[numeric.columns], as.numeric)
   return(metadata)
 }
 
-metadata = metatdata.type(metadata)
+metadata <- metatdata.type(metadata)
 
 rownames(table) <- table$"#OTU ID"
 table$"#OTU ID" <- NULL
@@ -67,7 +64,8 @@ pf <- PhyloFactor(
   ncores = ncores)
 
 basis <- pf$basis
-colnames(basis) <- sapply(1:nfactors, FUN = function(x) paste("Factor_", x, sep = ""))
+colnames(basis) <- sapply(1:nfactors,
+                          FUN = function(x) paste("Factor_", x, sep = ""))
 write.table(basis,
             file = basis.path,
             sep = "\t",
