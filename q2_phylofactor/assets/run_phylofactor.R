@@ -11,10 +11,11 @@ formula <- as.formula(args[[5]])
 choice <- args[[6]]
 nfactors <- as.integer(args[[7]])
 ncores <- as.integer(args[[8]])
-basis.path <- args[[9]]
-out_tree.path <- args[[10]]
-group.path <- args[[11]]
-factor.path <- args[[12]]
+out_data.path <- args[[9]]
+basis.path <- args[[10]]
+out_tree.path <- args[[11]]
+group.path <- args[[12]]
+factor.path <- args[[13]]
 
 table <- read.csv(
     file = table.path,
@@ -86,6 +87,13 @@ groups_to_df <- function(g){
   }
   return(DF)
 }
+
+write.table(pf$Data,
+          file = out_data.path,
+          sep = "\t",
+          row.names = TRUE,
+          col.names = TRUE,
+          quote = FALSE)
 
 group.df <- groups_to_df(pf.groupsTospecies(pf))
 write.table(group.df,

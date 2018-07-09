@@ -43,7 +43,9 @@ plugin.methods.register_function(
         'nfactors': Int,
         'ncores': Int
     },
+
     outputs=[
+        ('data', FeatureTable[Composition]),
         ('basis', FeatureTable[Composition]),
         ('tree', Phylogeny[Unrooted]),
         ('groups', FeatureData[FactorGroups]),

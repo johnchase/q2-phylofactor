@@ -40,6 +40,7 @@ def _phylofactor(table,
             fh.write(table.to_tsv())
         metadata.save(input_metadata)
 
+        data_output = os.path.join(temp_dir_name, 'data.tsv')
         basis_output = os.path.join(temp_dir_name, 'basis.tsv')
         tree_output = os.path.join(temp_dir_name, 'tree.nwk')
         group_output = os.path.join(temp_dir_name, 'group.tsv')
@@ -54,6 +55,7 @@ def _phylofactor(table,
                str(choice),
                str(nfactors),
                str(ncores),
+               str(data_output),
                str(basis_output),
                str(tree_output),
                str(group_output),
@@ -81,6 +83,7 @@ def phylofactor(table: biom.Table,
                 nfactors: int = 10,
                 ncores: int = 1
                 ) -> (pd.DataFrame,
+                      pd.DataFrame,
                       skbio.tree.TreeNode,
                       pd.DataFrame,
                       pd.DataFrame):
