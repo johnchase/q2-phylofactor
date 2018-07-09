@@ -88,7 +88,7 @@ groups_to_df <- function(g){
   return(DF)
 }
 
-write.table(pf$Data,
+write.table(t(pf$Data),
           file = out_data.path,
           sep = "\t",
           row.names = TRUE,

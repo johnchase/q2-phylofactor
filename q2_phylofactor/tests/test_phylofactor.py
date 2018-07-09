@@ -26,12 +26,14 @@ class TestPhylofactor(TestPluginBase):
 
         exp_basis = pd.read_csv(
             self.get_data_path('expected/categorical_basis.tsv'), sep='\t')
+        exp_data = pd.read_csv(
+            self.get_data_path('expected/categorical_data.tsv'), sep='\t')
         exp_groups = pd.read_csv(
             self.get_data_path('expected/categorical_groups.tsv'), sep='\t')
         exp_factors = pd.read_csv(
             self.get_data_path('expected/categorical_factors.tsv'), sep='\t')
-        exp_tree = TreeNode.read(self
-        .get_data_path('expected/categorical_tree.nwk'))
+        exp_tree = TreeNode.read(
+            self.get_data_path('expected/categorical_tree.nwk'))
 
         pf = phylofactor(self.table,
                          self.phylogeny,
@@ -40,23 +42,26 @@ class TestPhylofactor(TestPluginBase):
                          nfactors=3,
                          family='binomial')
 
-        basis, out_tree, groups, factors = pf
+        data, basis, out_tree, groups, factors = pf
 
         assert_frame_equal(basis, exp_basis)
         assert_frame_equal(groups, exp_groups)
         assert_frame_equal(factors, exp_factors)
+        assert_frame_equal(data, exp_data)
         self.assertEqual(TreeNode.compare_rfd(exp_tree, out_tree), 0)
 
 
     def test_continous(self):
         exp_basis = pd.read_csv(
             self.get_data_path('expected/numeric_basis.tsv'), sep='\t')
+        exp_data = pd.read_csv(
+            self.get_data_path('expected/numeric_data.tsv'), sep='\t')
         exp_groups = pd.read_csv(
             self.get_data_path('expected/numeric_groups.tsv'), sep='\t')
         exp_factors = pd.read_csv(
             self.get_data_path('expected/numeric_factors.tsv'), sep='\t')
-        exp_tree = (TreeNode.read(self
-        .get_data_path('expected/numeric_tree.nwk')))
+        exp_tree = (TreeNode.read(
+            self.get_data_path('expected/numeric_tree.nwk')))
 
         pf = phylofactor(self.table,
                          self.phylogeny,
@@ -65,20 +70,22 @@ class TestPhylofactor(TestPluginBase):
                          nfactors=3,
                          family='poisson')
 
-        basis, out_tree, groups, factors = pf
+        data, basis, out_tree, groups, factors = pf
 
         assert_frame_equal(basis, exp_basis)
         assert_frame_equal(groups, exp_groups)
         assert_frame_equal(factors, exp_factors)
+        assert_frame_equal(data, exp_data)
         self.assertEqual(TreeNode.compare_rfd(exp_tree, out_tree), 0)
 
-
-    # def test_non_matching_tips(self):
-    #     pass
-    # def test_missing_columns(self):
-    #     pass
-    # def test_choice_var(self):
-    #     pass
+# class TestPhylofactor(TestPluginBase):
+#     package = 'q2_phylofactor.tests'
+#
+#     def setUp(self):
+#         super().setUp()
+#
+#
+#     def test_defaults(self):
 
 
 if __name__ == '__main__':

@@ -67,11 +67,12 @@ def _phylofactor(table,
             raise Exception("An error was encountered with PhyloFactor"
                             " in R (return code %d), please inspect stdout"
                             " and stderr to learn more." % e.returncode)
+        data = pd.read_csv(data_output, sep='\t')
         basis = pd.read_csv(basis_output, sep='\t')
         tree = skbio.tree.TreeNode.read(tree_output)
         groups = pd.read_csv(group_output, sep='\t')
         factors = pd.read_csv(factor_output, sep='\t')
-    return basis, tree, groups, factors
+    return data, basis, tree, groups, factors
 
 # Does this really need to be it's own function?
 def phylofactor(table: biom.Table,
